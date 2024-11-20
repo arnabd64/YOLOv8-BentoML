@@ -1,0 +1,40 @@
+# Documentation: https://docs.bentoml.com/en/latest/guides/configurations.html
+service:
+  resources:
+    cpu: 2
+    memory: 500Mi
+  workers: 4
+  traffic:
+    timeout: 30
+    max_concurrency: 32
+  logging:
+    access:
+      enabled: true
+      request_content_length: true
+      request_content_type: false
+      response_content_length: true
+      response_content_type: false
+      skip_paths:
+        - /metrics
+        - /healthz
+        - /livez
+        - /readyz
+  http:
+    port: 5000
+    cors:
+      enabled: true
+      access_control_allow_origins:
+        - "*"
+      access_control_allow_methods:
+        - GET
+        - POST
+        - OPTIONS
+      access_control_allow_credentials: true
+      access_control_allow_headers: 
+        - "*"
+
+
+api:
+  route: /inference
+  name: YOLO-Bounding-Boxes
+  batchable: false
