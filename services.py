@@ -8,7 +8,7 @@ from pydantic import Field
 from ultralytics import YOLO
 import yaml
 
-with open("bento-settings.yml", "r") as cfg:
+with open("bento-settings.yaml", "r") as cfg:
     settings = yaml.load(cfg, yaml.SafeLoader)
 
 
