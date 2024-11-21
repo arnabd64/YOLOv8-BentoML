@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 from typing import Annotated, List
 
@@ -13,7 +14,8 @@ with open("bento-settings.yaml", "r") as cfg:
     settings = yaml.load(cfg, yaml.SafeLoader)
 
 # download model
-_ = YOLO("yolov8n.pt")
+MODEL_NAME = os.getenv("YOLO_MODEL", "yolov8s.pt")
+_ = YOLO(MODEL_NAME)
 
 
 Image = Annotated[Path, ContentType("image/*")]
@@ -23,9 +25,9 @@ CutOffScore = Annotated[float, Field(0.5, gt=0, lt=1)]
 @bentoml.service(**settings["service"])
 class YoloService:
     def __init__(self):
-        self.model = YOLO("yolov8n.pt")
+        self.model = YOLO(MODEL_NAME)
 
-    @bentoml.api(batchable=True, max_batch_size=8)
+    @bentoml.api(batchable=True)
     def inference(self, images: List[Image]):
         """
         performs object detection on images
