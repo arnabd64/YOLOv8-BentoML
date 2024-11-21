@@ -1,6 +1,6 @@
 import json
 from pathlib import Path
-from typing import Annotated, Any, Dict, List
+from typing import Annotated, List
 
 import bentoml
 import yaml
@@ -26,12 +26,18 @@ class YoloService:
         self.model = YOLO("yolov8n.pt")
 
     @bentoml.api(batchable=True, max_batch_size=8)
-    def inference(self, images: List[Image]) -> List[List[Dict[str, Any]]]:
+    def inference(self, images: List[Image]):
         """
         performs object detection on images
         """
         output = self.model.predict(images, verbose=False)
-        responses = [json.loads(response.to_json(decimals=2)) for response in output]
+        responses = [
+            {
+                "image": image.stem + image.suffix,
+                "objects": json.loads(result.to_json()) if len(result) > 0 else None,
+            }
+            for image, result in zip(images, output)
+        ]
         return responses
 
     @bentoml.api(batchable=False)
@@ -40,3 +46,7 @@ class YoloService:
         output = image.parent.joinpath(f"{image.stem}_result{image.suffix}")
         result.save(str(output))
         return output
+
+    @bentoml.api(batchable=False)
+    def object_id_map(self):
+        return self.model.names

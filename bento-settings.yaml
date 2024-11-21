@@ -2,7 +2,7 @@
 service:
   resources:
     cpu: 2
-    memory: 500Mi
+    memory: 1Gi
   workers: 1
   traffic:
     timeout: 30
@@ -10,9 +10,9 @@ service:
   logging:
     access:
       enabled: true
-      request_content_length: true
+      request_content_length: false
       request_content_type: false
-      response_content_length: true
+      response_content_length: false
       response_content_type: false
       skip_paths:
         - /metrics
