@@ -1,19 +1,28 @@
-service: services:YoloService
+# "service.py:ClassName"
+service: service:YoloService
+
+# metadata
 labels:
   author: arnabd64
   email: arnabdhar32@gmail.com
   github: arnabd64/YOLOv8-BentoML
+
+# files to add to container
 include:
   - "*.py"
   - "bento-settings.yaml"
+
+# python packages to install
 python:
   packages:
     - torch
     - torchvision
     - ultralytics
   extra_index_url:
-    - "https://download.pytorch.org/whl/cpu"
     - "https://pypi.python.org/simple"
+    - "https://download.pytorch.org/whl/cpu"
+
+# docker image
 docker:
   distro: debian
   python_version: "3.12"

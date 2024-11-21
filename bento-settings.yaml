@@ -3,7 +3,7 @@ service:
   resources:
     cpu: 2
     memory: 500Mi
-  workers: 4
+  workers: 1
   traffic:
     timeout: 30
     max_concurrency: 32
@@ -32,9 +32,3 @@ service:
       access_control_allow_credentials: true
       access_control_allow_headers: 
         - "*"
-
-
-api:
-  route: /inference
-  name: YOLO-Bounding-Boxes
-  batchable: false
